@@ -9,6 +9,9 @@ class BroadcastHandler(tornado.web.RequestHandler):
 
     def post(self):
         message = self.get_argument('message')
+        key = self.get_argument('id', None)
         for client in ClientConnection.clients:
+            if key and not key == client.id:
+                continue
             client.send(message)
         self.write('message send.')
